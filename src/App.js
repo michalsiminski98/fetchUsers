@@ -1,20 +1,22 @@
 import { useEffect, useState } from "react";
+import axios from "axios";
 
 function App() {
   const [users, setUsers] = useState([]);
 
-  const f = async () => {
-    const res = await fetch("https://reqres.in/api/users/");
-    const json = await res.json();
-    setUsers(json.data);
-    console.log(users);
-  };
-
   useEffect(() => {
-    f();
+    axios
+      .get("https://reqres.in/api/users/")
+      .then((response) => {
+        console.log(response.data.data);
+        setUsers(response.data.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
-  return <div className="App">{users}</div>;
+  return <div className="App">{users.map((user) => user.first_name)}</div>;
 }
 
 export default App;
